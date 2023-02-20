@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="container-sm pt-5 mt-5">
+    <div class="pb-1 mt-5">
+        <div class="card">
+            <form method="post" action="/tasks/create" class="card-body">
+                <div class=" align-items-center">
+                    <div class="container d-flex my-2 justify-content-between">
+                        <input required name="task" type="text" class="form-control form-control-lg w-75 mx-2" id="exampleFormControlInput1" placeholder="Add new...">
+                        <input type="datetime-local" name="dueTo" class="form-control form-control-lg datepicker w-25" inline="true">
+                    </div>
+                    <input name="description" type="text" class="form-control form-control-lg mx-2" placeholder="Description (Optional)">
+
+                    <div class="container d-flex my-2 align-items-center">
+                        <p  class="form-control border-0 form-control-lg me-2">🔼🔼🔼 You can use markdown here 🔼🔼🔼 (To jump to new line leave 2 spaces)</p>
+                        <button type="submit" class="btn btn-primary btn-lg" style="">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <div class="container-sm mt-5 pt-5 list-group w-auto">
+        {% for item in tasks %}
+
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <form method="post" action="/tasks/{{ item.id }}{% if item.status != "Done" %}?status=Done{% elif item.status == "Done" %}/delete{% endif %}" class="d-flex gap-2 w-100 justify-content-between">
+                        <label class="d-flex gap-2 w-100">
+                            <input class="form-check-input flex-shrink-0 {% if item.status != "Done" %}opacity-0{% endif %}" disabled type="checkbox" {% if item.status == "Done" %}checked{% endif %}>
+                            <span>
+                                {{ item.task }}
+                                <small class="d-block">
+                                    {{ item.created_at.strftime('%Y-%m-%d %H:%M') }} <span class="mx-2 border rounded-pill border-1 border-secondary bg-secondary " style="padding: 0;"></span>
+                                    {% if item.description %}
+                                    {{ item.description|safe }}
+                                    {% endif %}
+                                </small>
+                            </span>
+                        </label>
+                        <label class="d-flex flex-column justify-content-end">
+                                <small class="d-block text-mut text-end text-nowrap">{% if item.completed is defined and item.completed is not none %}Done: {{ item.completed.strftime('%Y-%m-%d %H:%M') }}{% elif item.due_to is defined and item.due_to is not none %}Due: {{ item.due_to.strftime('%Y-%m-%d %H:%M') }}{% endif %}</small>
+
+                                {% if item.status != "Done" %}
+                                    <button type="submit" class="btn btn-primary btn-md text-nowrap float-right">Mark as Done</button>
+                                {% elif item.status == "Done" %}
+                                    <button type="submit" class="btn btn-danger btn-md text-nowrap float-right">Delete task</button>
+                                {% endif %}
+                        </label>
+
+                    </form>
+                </a>
+        {% endfor %}
+    </div>
+{% endblock %}

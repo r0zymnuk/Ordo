@@ -1,0 +1,85 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="container-sm pt-5 mt-5">
+    <div class="pb-1 mt-5">
+        <div class="card">
+            <form method="post" action="/finances/add" class="card-body">
+                <div class=" align-items-center">
+
+                    <div class="container my-2 ">
+                        <div class="container d-flex justify-content-between mx-0">
+                            <input required name="title" type="text" class="form-control form-control-lg me-2" placeholder="Title">
+                            <select class="form-control form-control-lg w-25" name="type" required>
+                                <option value="income">Income</option>
+                                <option selected value="spending">Spending</option>
+                            </select>
+                        </div>
+                        <div class="container d-flex justify-content-between my-2 mx-0">
+                            <input required name="transactionAmount" min="0" value="0" type="number" step=any class="form-control form-control-lg w-50"  placeholder="Amount">
+                            <select name="currency" class="form-control form-control-lg mx-2 w-25">
+                                {% for currency in currencies %}
+                                <option {% if currency[0] == context.user.currency %}selected{% endif %} value="{{ currency[0] }}">{{ currency[1] }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="datetime-local" name="transactionTime" class="form-control form-control-lg datepicker w-25">
+                        </div>
+
+                    </div>
+                    <div class="container d-flex my-2">
+                        <input name="description" type="text" class="form-control form-control-lg me-2" placeholder="Description (Optional)">
+                        <button type="submit" class="btn btn-primary btn-lg fs-4 " style="">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+    <div class="container-sm mt-5 pt-5 list-group w-auto">
+        {% if income is defined and income > 0 %}
+                    <div class="container pb-4">
+                        <label style="" class="fs-5 container-fluid w-100 text-end d-flex flex-row justify-content-between py-1" for="progress">
+                            <p class="my-0">0.00 {{ context.user.currency }}</p>
+                            <span style="" class="rounded-pill {% if spending >= income %}text-bg-danger{% else %}text-bg-primary{% endif %} align-items-center text-center px-3">Spent: {{ "%.2f"|format(spending) }} {{ context.user.currency }}</span>
+                            <p class="my-0">{{ "%.2f"|format(income) }} {{ context.user.currency }}</p>
+                        </label>
+                        <div id="progress" class=" progress border-3 border {% if spending >= income %} border-danger{% else %} border-primary{% endif %}" style="height: 2rem;">
+                          <div class="progress-bar fs-5 {% if spending >= income %}bg-danger{% else %}bg-primary{% endif %}" role="progressbar" style="width: {{ 100 * spending / income }}%;" aria-valuenow="{{ spending }}" aria-valuemin="0" aria-valuemax="{{ income }}"></div>
+                        </div>
+                        <label style="" class="fs-5 container-fluid w-100 text-end d-flex flex-row justify-content-around py-1" for="progress">
+                            <span style="" class="rounded-pill {% if spending >= income %}text-bg-danger{% else %}text-bg-primary{% endif %} align-items-center text-center px-3">{% if spending >= income %}Overspending: {{ "%.2f"|format((income - spending)) }}{% else %}Left: {{ "%.2f"|format((income - spending)) }}{% endif %} {{ context.user.currency }}</span>
+                        </label>
+                    </div>
+        {% endif %}
+        {% for item in transactions %}
+
+                <a class="list-group-item list-group-item-action gap-3 fs-5 py-3">
+                    <form method="post" action="/savings/{{ item['_id'] }}" class="d-flex gap-2 w-100 justify-content-between">
+
+                        <label class="">
+                            <span class="text-end float-right d-block ">
+                                {% if item.transaction_time is defined and item.transaction_time != item.created_at %}{{ item.transaction_time.strftime('%Y-%m-%d %H:%M') }}{% else %}{{ item.created_at.strftime('%Y-%m-%d %H:%M') }}{% endif %}<span class="mx-2 border rounded-pill border-1 border-secondary bg-secondary " style="padding: 0;"></span>
+                                {{ item.title }}
+                            </span>
+                            <span class="text-end float-right d-block">
+                                {% if item.description is defined and item.description is not none and item.description  != '' %}
+                                    {{ item.description}}
+                                {% endif %}
+                            </span>
+                        </label>
+                        <label class="text-end">
+
+                                {% if item.type == "income" %}
+                                <span class="fs-5 badge rounded-pill text-bg-success">+ {{ "%.2f"|format(item.amount) }} {{ context.user.currency }}</span>
+                                {% else %}
+                                <span class="fs-5 badge rounded-pill text-bg-danger">- {{ "%.2f"|format(item.amount) }} {{ context.user.currency }}</span>
+                                {% endif %}
+                        </label>
+
+                    </form>
+                </a>
+        {% endfor %}
+    </div>
+{% endblock %}

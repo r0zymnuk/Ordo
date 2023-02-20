@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="container-sm pt-5 mt-5">
+    <div class="pb-1 mt-5">
+        <div class="card">
+            <form method="post" action="/savings/create" class="card-body">
+                <div class=" align-items-center">
+
+                    <div class="container my-2 ">
+                        <input required name="title" type="text" class="form-control form-control-lg" placeholder="Title">
+                        <div class="container d-flex justify-content-between my-2 mx-0">
+                            <input required name="target" type="number" class="form-control form-control-lg w-50"  placeholder="Amount wanted">
+                            <select name="currency" class="form-control form-control-lg mx-2 w-25">
+                                {% for currency in currencies %}
+                                <option {% if currency[0] == context.user.currency %}selected{% endif %} value="{{ currency[0] }}">{{ currency[1] }}</option>
+                                {% endfor %}
+                            </select>
+                            <input type="datetime-local" name="dueTo" class="form-control form-control-lg datepicker w-25">
+                        </div>
+
+                    </div>
+                    <div class="container d-flex my-2">
+                        <input name="description" type="text" class="form-control form-control-lg me-2" placeholder="Description (Optional)">
+                        <button type="submit" class="btn btn-primary btn-lg fs-4 " style="">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    <div class="container-sm mt-5 pt-5 list-group w-auto">
+        {% for item in savings %}
+
+                <a class="list-group-item list-group-item-action gap-3 fs-5 py-3">
+                    <div class="container pb-4">
+                        <label style="" class="container-fluid w-100 text-end d-flex flex-row justify-content-between py-1" for="progress">
+                            <p class="my-0">0 {{ item.finance.currency.code }}</p>
+                            <span style="" class="rounded-pill text-bg-primary align-items-center text-center px-3">{{ item.finance.now }} {{ item.finance.currency.code }}</span>
+                            <p class="my-0">{{ item.finance.target }} {{ item.finance.currency.code }}</p>
+                        </label>
+                        <div id="progress" class="progress border-3 border border-primary" style="height: 2rem;">
+                          <div class="progress-bar fs-5" role="progressbar" style="width: {{ 100 * item.finance.now / item.finance.target }}%;" aria-valuenow="{{ item.finance.now }}" aria-valuemin="0" aria-valuemax="{{ item.finance.target }}"> </div>
+                        </div>
+                    </div>
+                    <form method="post" action="/savings/{{ item['_id'] }}{% if item.closed_at is not defined or item.closed_at is none %}/add{% endif %}" class="d-flex gap-2 w-100 justify-content-between">
+
+                        <label class="d-flex gap-2">
+                            <input class="form-check-input flex-shrink-0 {% if item.closed_at is not defined or item.closed_at is none %}opacity-0{% endif %}" disabled type="checkbox" {% if item.closed_at is defined and item.closed_at is not none %}checked{% endif %}>
+                            <span class="">
+                                {{ item.title }}
+                                <small class="text-end float-right d-block ">
+                                    {{ item.created_at.strftime('%Y-%m-%d %H:%M') }} <span class="mx-2 border rounded-pill border-1 border-secondary bg-secondary " style="padding: 0;"></span>
+                                    {% if item.description is defined and item.description is not none and item.description  != '' %}
+                                    {{ item.description}}
+                                    {% endif %}
+                                </small>
+                            </span>
+                        </label>
+                        <label class="d-flex flex-column justify-content-end">
+                                <small class="d-block text-mut text-end text-nowrap">{% if item.closed_at is defined and item.closed_at is not none %}Done: {{ item.closed_at.strftime('%Y-%m-%d %H:%M') }}{% elif item.due_to is defined and item.due_to is not none %}Due: {{ item.due_to.strftime('%Y-%m-%d %H:%M') }}{% endif %}</small>
+                                <span class="container align-items-center d-flex">
+                                    {% if item.closed_at is not defined or item.closed_at is none %}
+                                    <label class="text-nowrap">Add money ▶▶▶</label>
+                                    <input name="addAmount" class="form-control mx-2 fs-4 " value="0" type="number">
+                                    <button type="submit" class="fs-4 btn btn-primary btn-md text-nowrap float-right me-2">Add</button>
+                                    {% endif %}
+
+                                    <button type="button" onclick="document.getElementById('{{ item['_id'] }}').submit();" class="fs-4  btn btn-danger btn-md text-nowrap float-right">Delete</button>
+                                </span>
+
+                        </label>
+
+                    </form>
+                    <form id="{{ item['_id'] }}" action="/savings/{{ item['_id'] }}/delete" method="post"></form>
+                </a>
+        {% endfor %}
+    </div>
+{% endblock %}

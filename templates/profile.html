@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="container-sm pt-5 mt-5">
+    <div class="pb-1 mt-5">
+        <div class="card">
+            <form method="POST" action="/accounts/profile" class="card-body">
+                <div class=" align-items-center">
+                    <div class="container d-flex my-2 justify-content-between">
+                        <input name="email" type="email" class="form-control form-control-lg w-50 mx-2" id="exampleFormControlInput1" placeholder="{% if user.email is defined and user.email is not none %}{{ user.email}}{% else %}Enter new email{% endif %}">
+                        <input type="text" name="username" class="form-control form-control-lg w-50" inline="true" placeholder="{{ user.username }}">
+                    </div>
+                    <div class="container d-flex my-2 justify-content-between">
+                        <input name="last_name" type="text" class="form-control form-control-lg w-50 mx-2" placeholder="{% if user.last_name is defined and user.last_name is not none %}{{ user.last_name }}{% else %}Enter Your last name{% endif %}">
+                        <input type="text" name="name" class="form-control form-control-lg w-50" inline="true" placeholder="{% if user.name is defined and user.name is not none and user.name != '' %}{{ user.name }}{% else %}Enter Your first name{% endif %}">
+                    </div>
+                    <div class="container d-flex my-2 justify-content-between">
+                        <input name="password" type="password" class="form-control form-control-lg w-50 mx-2" placeholder="New password">
+                        <input type="password" name="passwordConfirm" class="form-control form-control-lg w-50" placeholder="Confirm new password">
+                    </div>
+                    <div class="container d-flex float-right my-2">
+                        <select name="currency" class="form-control form-control-lg me-2 w-25">
+                            {% for currency in currencies %}
+                                <option {% if currency[0] == context.user.currency %}selected{% endif %} value="{{ currency[0] }}">{{ currency[1] }}</option>
+                            {% endfor %}
+                        </select>
+                        <p class="w-100 pt-2 ms-2">{{ message }}</p>
+
+                        <a href="/accounts/{{ user['_id'] }}/delete" class=" text-nowrap btn btn-danger btn-lg" style="">Delete Account</a>
+                        <button type="submit" class="mx-2 btn btn-primary btn-lg" style="">Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

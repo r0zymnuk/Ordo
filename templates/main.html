@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+            <div class="col-lg-7 text-center text-lg-start">
+                <h1 class="display-3 fw-bold lh-1 mb-3">Give order to your life</h1>
+                <p class="col-lg-10 fs-3">Get organized and stay organized with <b>Ordo</b>, and take control of your life.</p>
+            </div>
+            <div class="col-md-10 mx-auto col-lg-5">
+                <form method="post" action="/accounts/register" class="p-4 p-md-5 border rounded-3 bg-light">
+                    <div class="form-floating mb-3">
+                        <input name="email" type="email" class="form-control" id="floatingInput" placeholder="name@example.com">
+                        <label for="floatingInput">Email address</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input name="password" type="password" class="form-control" id="floatingPassword" placeholder="Password">
+                        <label for="floatingPassword">Password</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input name="passwordConfirm" type="password" class="form-control" placeholder="Confirm Password">
+                        <label for="floatingPassword">Confirm Password</label>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign up</button>
+                    <hr class="my-4">
+                    <small class="text-muted">By clicking Sign up, you agree to the terms of use.</small>
+                </form>
+            </div>
+    </div>
+</div>  
+
+<div class="container px-4 py-5" id="featured-3">
+    <h2 class="pb-2 border-bottom">Features</h2>
+    <div class="row g-4 py-5 row-cols-6 row-cols-lg-2">
+        <div class="feature col px-6">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+                <img height="50rem" width="50rem" style="color:#212529" src="https://www.svgrepo.com/show/352552/tasks.svg" alt="" class="bi">
+            </div>
+            <h3 class="fs-2 fw-semibold">Tasks</h3>
+            <p class="fs-4">With our task tracker You can easily manage all your tasks and be shure You will not be late for anything</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+                <img height="50rem" width="50rem" style="color:#212529" src="https://www.svgrepo.com/show/283460/savings-hog.svg" alt="" class="bi">
+            </div>
+            <h3 class="fs-2 fw-semibold">Savings</h3>
+            <p class="fs-4">Track your savings and celebrate your progress to stay motivated and improve</p>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center fs-2 mb-3">
+                <img height="50rem" width="50rem" style="color:#212529" src="https://www.svgrepo.com/show/355122/money.svg" alt="" class="bi">
+            </div>
+            <h3 class="fs-2 fw-semibold">Budget</h3>
+            <p class="fs-4">Take control over your finances with our budget app</p>
+        </div>
+        <div class="feature col">
+            <div style="color:#212529;" class="feature-icon d-inline-flex align-items-center justify-content-center text fs-2 mb-3">
+                <img height="50rem" width="50rem" style="color:#212529" src="https://www.svgrepo.com/show/191694/notes-notepad.svg" alt="" class="bi">
+            </div>
+            <h3 class="fs-2 fw-semibold">Notes</h3>
+            <p class="fs-4">Our notes feature will make sure that all bright ideas will be remembered <br>and created (It's up to You)</p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

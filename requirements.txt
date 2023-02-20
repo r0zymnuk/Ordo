@@ -1,0 +1,10 @@
+flask~=2.2.2
+flask_session
+pymongo~=4.3.3
+pydantic~=1.10.2
+Werkzeug~=2.2.2
+passlib~=1.7.4
+markdown~=3.4.1
+bcrypt
+forex-python
+requests~=2.28.1

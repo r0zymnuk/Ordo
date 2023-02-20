@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block main %}
+<div class="container-sm pt-5 mt-5">
+    <div class="pb-1 mt-5">
+        <div class="card">
+            <form method="post" action="/notes/{{ note['_id'] }}/update" class="card-body">
+                <div class=" align-items-center">
+                    <div class="container d-flex my-2 justify-content-between">
+                        <textarea name="note" class="form-control form-control-lg w-100 mx-2" id="exampleFormControlInput1" placeholder="{{ note.content }}" rows="10">{{ note.content }}</textarea>
+                    </div>
+                    <div class="container d-flex ">
+                        <p  class="form-control border-0 form-control-lg mx-2">🔼🔼🔼 You can use markdown here 🔼🔼🔼 (To jump to new line leave 2 spaces)</p>
+                        <button type="submit" class="btn btn-primary btn-lg" style="">Update</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordo</title>
+    <link rel="icon" type="image/x-icon" href="https://lh3.googleusercontent.com/u/0/drive-viewer/AAOQEOTw-sVCQp5fwKxhJa4QKM_v0PTuLa1OuMPid2bPpbbVzkqI6F7PI8qbuURz9KgbcXpWHG0xt7X26SgTwQsy5VMIAAwm1g=w1920-h902">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+        #navbar{
+            background: rgba( 255, 255, 255, 0.5 );
+            box-shadow: 0 4px 8px 0 rgba(92, 95, 142, 0.37);
+            backdrop-filter: blur( 10px );
+            -webkit-backdrop-filter: blur( 10px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+        }
+
+        body{
+            font-family: 'Poppins', sans-serif;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            display: none;
+            position: absolute;
+            z-index: 1;
+            list-style: none;
+
+        }
+        .dropdown-content > li{
+            background: rgba( 255, 255, 255, 0.5 );
+            box-shadow: 0 4px 8px 0 rgba(92, 95, 142, 0.37);
+            backdrop-filter: blur( 16px );
+            -webkit-backdrop-filter: blur( 16px );
+            border-radius: 10px;
+            border: 1px solid rgba( 255, 255, 255, 0.18 );
+        }
+
+        #fin-drop:hover .dropdown-content{
+            display: block;
+        }
+    </style>
+    <style>
+        {% block styles %}
+        {% endblock %}
+    </style>
+</head>
+<body>
+    <div id="navbar" class="container-sm mt-2  border-bottom fixed-top">
+        <header class="d-flex justify-content-center py-3">
+            <ul class="nav nav-pills fs-5">
+                {% if context.user is not defined %}
+                    <li class="nav-item mx-2"><a href="/" class="nav-link {% if landing is defined %}active{% endif %}">Home</a></li>
+                {% endif%}
+                <li class="nav-item mx-2"><a href="/notes/" class="nav-link {% if notes is defined %}active{% endif %}">Notes</a></li>
+                <li class="nav-item mx-2"><a href="/tasks/" class="nav-link {% if tasks is defined %}active{% endif %}">Tasks</a></li>
+                <div id="fin-drop" class="dropdown">
+                    <li class="nav-item mx-2"><a href="/finances/" class="nav-link {% if savings is defined or finances is defined %}active{% endif %}">Finances</a></li>
+                    <ul class="dropdown-content list-group text-center">
+                        <li class="nav-item mx-2 mb-2 border border-2 border-primary rounded"><a href="/finances/management" class="nav-link">Budget</a></li>
+                        <li class="nav-item mx-2 mb-2 border border-2 border-primary rounded"><a href="/savings/" class="nav-link">Savings</a></li>
+                    </ul>
+                </div>
+
+                {% if context.user is defined %}
+                    <li class="d-flex nav-item mx-2"><a href="/accounts/profile" class="nav-link {% if profile is defined %}active{% endif %}">{{ context.user.name }}</a><a href="/accounts/logout" class="nav-link">Log Out</a></li>
+                {% else %}
+                    <li class="nav-item mx-2"><a href="/accounts/register" class="nav-link">Sign Up</a></li>
+                {% endif%}
+
+            </ul>
+        </header>
+    </div>
+
+    <main>
+        {% block main %}
+        {% endblock %}
+    </main>
+
+
+
+    <div class="container">
+            <footer class="py-3 my-4">
+                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Landing</a></li>
+                    <li class="nav-item"><a href="/notes/" class="nav-link px-2 text-muted">Notes</a></li>
+                    <li class="nav-item"><a href="/tasks/" class="nav-link px-2 text-muted">Tasks</a></li>
+                    <li class="nav-item"><a href="/savings/" class="nav-link px-2 text-muted">Savings</a></li>
+                    <li class="nav-item"><a href="/finances/management" class="nav-link px-2 text-muted">Budget</a></li>
+                </ul>
+                <p class="text-center text-muted">Ordo</p>
+            </footer>
+    </div>
+
+    <!-- JS -->
+
+</body>
+</html>
