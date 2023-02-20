@@ -52,6 +52,11 @@
                             <span style="" class="rounded-pill {% if spending >= income %}text-bg-danger{% else %}text-bg-primary{% endif %} align-items-center text-center px-3">{% if spending >= income %}Overspending: {{ "%.2f"|format((income - spending)) }}{% else %}Left: {{ "%.2f"|format((income - spending)) }}{% endif %} {{ context.user.currency }}</span>
                         </label>
                     </div>
+                    <div class="container-fluid pb-2 d-flex flex-row-reversed">
+                        <form action="/finances/clear" method="post">
+                            <button class="btn btn-danger btn-lg" type="submit">Clear</button>
+                        </form>
+                    </div>
         {% endif %}
         {% for item in transactions %}
 

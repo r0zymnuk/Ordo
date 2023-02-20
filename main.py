@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 from flask_session import Session
 import datetime
 from db import client
@@ -25,9 +25,11 @@ Session(app)
 @app.route("/")
 def root():
     context = {}
-    if request.cookies.get("user_id") is not None:
+    if request.cookies.get("user_id") is not None and len(request.cookies.get("user_id")) > 12:
         user_context = {}
         user = client["user"].find_one({"_id": ObjectId(request.cookies.get("user_id"))})
+        if user is None:
+            return redirect("/accounts/logout")
         user_context["id"] = request.cookies.get("user_id")
         user_context["name"] = user.get("name", user.get("full_name", user["username"]))
         context["user"] = user_context

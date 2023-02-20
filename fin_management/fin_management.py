@@ -78,30 +78,8 @@ def add_record():
     return redirect("/finances/management")
 
 
-@finances.post("/<savingId>/delete")
+@finances.post("/clear")
 @login_required
-def delete_saving(savingId):
-    client['savings'].find_one_and_delete(
-        {"_id": ObjectId(savingId), "owner": ObjectId(request.cookies.get("user_id"))}
-    )
-    return redirect("/savings/")
-
-
-@finances.post("/<savingId>/add")
-@login_required
-def add_money(savingId):
-    update_values = {
-        "$inc": {
-            "finance.now": int(request.form.get("addAmount", 0))
-        }
-    }
-    current = client['savings'].find_one({'_id': ObjectId(savingId), 'owner': ObjectId(request.cookies.get("user_id"))})
-    if (current["finance"]["now"] + int(request.form.get("addAmount", 0))) > current["finance"]["target"]:
-        update_values["$currentDate"] = {
-            "closed_at": True
-        }
-    client['savings'].find_one_and_update(
-        {'_id': ObjectId(savingId), 'owner': ObjectId(request.cookies.get("user_id"))},
-        update=update_values
-    )
-    return redirect("/savings/")
+def clear_budget():
+    client["finances"].delete_many({"owner": ObjectId(request.cookies.get("user_id"))})
+    return redirect("/finances/management")
