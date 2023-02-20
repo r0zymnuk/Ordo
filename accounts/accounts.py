@@ -43,9 +43,9 @@ def register():
         return render_template("register.html")
     if request.method == "POST":
         if not request.form.get("email") or not request.form.get("password") or not request.form.get("passwordConfirm"):
-            return render_template("login.html", error="All fields required")
+            return render_template("register.html", error="All fields required")
         if request.form.get("password") != request.form.get("passwordConfirm"):
-            return render_template("login.html", error="Passwords do not match")
+            return render_template("register.html", error="Passwords do not match")
         is_email = check_if_email(request.form.get("email"))
 
         valid_username = check_username(request.form.get("email"))
@@ -69,8 +69,8 @@ def register():
             name = None
 
         created_user = UserInDB(username=username, email=email, hashed=get_password_hash(request.form.get("password")),
-                                full_name=full_name, name=name)
-        inserted = client["user"].insert_one(created_user.dict(exclude_defaults=True))
+                                full_name=full_name, name=name, currency="USD", id=None)
+        inserted = client["user"].insert_one(created_user.dict())
         if inserted.acknowledged:
             resp = make_response(redirect("/"))
             resp.set_cookie("user_id", str(inserted.inserted_id))
