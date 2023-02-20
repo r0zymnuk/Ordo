@@ -40,6 +40,7 @@ def get_finances():
 
     return render_template(
         "finances.html",
+        datetime=datetime.now().strftime("%Y-%m-%dT%H:%M"),
         currencies=currency,
         context={"user": client['user'].find_one({"_id": ObjectId(request.cookies.get("user_id"))})},
         transactions=transactions,

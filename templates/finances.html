@@ -22,7 +22,7 @@
                                 <option {% if currency[0] == context.user.currency %}selected{% endif %} value="{{ currency[0] }}">{{ currency[1] }}</option>
                                 {% endfor %}
                             </select>
-                            <input type="datetime-local" name="transactionTime" class="form-control form-control-lg datepicker w-25">
+                            <input value="{{ datetime }}" type="datetime-local" name="transactionTime" class="form-control form-control-lg datepicker w-25">
                         </div>
 
                     </div>
