@@ -28,7 +28,7 @@
                     <form method="post" action="/tasks/{{ item.id }}{% if item.status != "Done" %}?status=Done{% elif item.status == "Done" %}/delete{% endif %}" class="d-flex gap-2 w-100 justify-content-between">
                         <label class="d-flex gap-2 w-100">
                             <input class="form-check-input flex-shrink-0 {% if item.status != "Done" %}opacity-0{% endif %}" disabled type="checkbox" {% if item.status == "Done" %}checked{% endif %}>
-                            <span>
+                            <span class=" fs-5">
                                 {{ item.task }}
                                 <small class="d-block">
                                     {{ item.created_at.strftime('%Y-%m-%d %H:%M') }} <span class="mx-2 border rounded-pill border-1 border-secondary bg-secondary " style="padding: 0;"></span>
@@ -39,12 +39,12 @@
                             </span>
                         </label>
                         <label class="d-flex flex-column justify-content-end">
-                                <small class="d-block text-mut text-end text-nowrap">{% if item.completed is defined and item.completed is not none %}Done: {{ item.completed.strftime('%Y-%m-%d %H:%M') }}{% elif item.due_to is defined and item.due_to is not none %}Due: {{ item.due_to.strftime('%Y-%m-%d %H:%M') }}{% endif %}</small>
+                                <small class="d-block text-mut text-end text-nowrap fs-6">{% if item.completed is defined and item.completed is not none %}Done: {{ item.completed.strftime('%Y-%m-%d %H:%M') }}{% elif item.due_to is defined and item.due_to is not none %}Due: {{ item.due_to.strftime('%Y-%m-%d %H:%M') }}{% endif %}</small>
 
                                 {% if item.status != "Done" %}
-                                    <button type="submit" class="btn btn-primary btn-md text-nowrap float-right">Mark as Done</button>
+                                    <button type="submit" class="btn btn-primary btn-md text-nowrap float-right  fs-5">Mark as Done</button>
                                 {% elif item.status == "Done" %}
-                                    <button type="submit" class="btn btn-danger btn-md text-nowrap float-right">Delete task</button>
+                                    <button type="submit" class="btn btn-danger btn-md text-nowrap float-right  fs-5">Delete task</button>
                                 {% endif %}
                         </label>
 
