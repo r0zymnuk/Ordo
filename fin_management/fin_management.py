@@ -28,7 +28,7 @@ def convert_to_currency(from_curr, to_curr, amount):
 def get_finances():
     """Returns Array of Savings where User is Owner"""
     transactions = list(client['finances'].find(filter={"owner": ObjectId(request.cookies.get("user_id"))},
-                                                sort=[("created_at", -1)],
+                                                sort=[("transaction_time", -1), ("created_at", -1)],
                                                 limit=125))
 
     income, spending = 0, 0
