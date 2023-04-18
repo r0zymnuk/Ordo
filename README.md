@@ -1,5 +1,5 @@
 # Ordo
-### Video Demo: 
+### Video Demo: https://youtu.be/06KQq0DicrE
 #### Description: Ordo is web based application created to help you organize your life. There you can track your tasks, write notes, track savings and manage your income and spendings.
 
 - requirements.txt  This file contains python modules needed to import to make this app work.
