@@ -1,22 +1,56 @@
 # Ordo
 ### Video Demo: https://youtu.be/06KQq0DicrE
 #### Description: Ordo is web based application created to help you organize your life. There you can track your tasks, write notes, track savings and manage your income and spendings.
+### On the top of Notes, Savings, Tasks or Budget management pages You can see forms to add new records.
 
+### Notes:
+#### Users write their notes in form on the top. They can format it as Markdown files.
+#### After submission the new note will be added and displayed on the page beautifly formated from Markdown to HTML.
+#### Notes are sorted by the time of creation, from newest to oldest. Users can edit and delete them.
+---
+### Tasks:
+#### Form to create new tasks have fields: title(required), due_to(deadline)(optional) and description.
+#### Description may also be written as Markdown files.
+#### In the list of user's tasks each task have button to mark them as done or delete if the task is done
+#### When you mark the task as done the checkbox on the left will show that the task is completed and on the right side of list item date and time of completion will display.
+---
+## Finances
+### Savings:
+#### Form for adding new saving have: title, amount wanted, desired currency, description(optional) and time due which you want to complete it(optional)
+#### In the list of savings each saving have its own progress bar that represents how much you need and how much you already put away to some safe place.
+#### Each saving also have field where you enter the amount of money, you have saved for it, to add to your current progress.
+#### If you dont want to keep saving you can delete each saving individuali.
+---
+### Budget Management
+#### Form for adding new transaction for tracking have fields: title, amount, currency in which transaction is(it will automaticaly convert to the currency selected on profile page, as default US Dollar), time when transaction was(as default time when the page was loaded) and description
+#### Transaction can be of two types: Income and Spending
+#### When there are some Income transactions right under the form will appear the bar that represents how much have you incomes and how much have you already spent.
+#### When user overspend their incomes the bar turns red and says how much had he overspent.
+#### When you want to clean your budget records you can click the button that says "Clear"
+#### Conversion between currencies is proceeded by [*ExchangeRate.Host*](https://exchangerate.host/)
+
+### Profile
+On this page user can change: email and username(if not taken), first and last name, profile budget currency, password
+When user want to change currency all his transactions will be converted to the new currency
+Also user can delete their profile
+
+---
+### Files:
 - requirements.txt  This file contains python modules needed to import to make this app work.
 - db.py   In this file I create connection to my MongoDB cluster.
 - decorators.py   Here I put path decorator @login_required
 - #### main.py     Here I have an instance of my Flask app and register all blueprints I need to give desired features. This file contains root endpoint "/" of the app.
 - ./__init__.py   Files with this name make folder available to import like python modules. I left these files empty.
-- ./models.py     In files with this name I put all my Pydantic models 
+- ./models.py     In files with this name I put all my Pydantic models
 - #### /accounts/   This folder contains files for */login */register */logout */update */profile endpoints
-  - auth.py     Here are functions I need to authenticate users  
+  - auth.py     Here are functions I need to authenticate users
   - accounts.py  File where I have my accounts blueprint instance and processing all /accounts endpoints
 - #### /fin_management/ Folder for Budget app
   - /fin_management.py Blueprint and endpoints for the app
 - #### /notes/ Folder for Notes app
   - /notes.py Blueprint and endpoints for the app
 - #### /tasks/ Folder for Todo app
-  - /tasks.py Blueprint and endpoints for the app 
+  - /tasks.py Blueprint and endpoints for the app
 - #### /savings/ Folder for Savings app
   - /savings.py Blueprint and endpoints for the app
 ---
