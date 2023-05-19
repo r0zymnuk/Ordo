@@ -1,6 +1,5 @@
 import datetime
-from typing import Optional
-from typing import Union
+from typing import Optional, Union, Literal
 
 from bson.json_util import ObjectId
 from pydantic import BaseModel, Field
@@ -34,6 +33,7 @@ class ToDo(BaseModel):
     id: Union[PyObjectId, None] = Field(default_factory=PyObjectId, alias="_id")
     status: str = "In work..."
     description: Optional[str] = None
+    type: str = Literal["Urgent & Important", "Urgent", "Important", "Not Important"]
     task: str
     owner: PyObjectId = None
     created_at: datetime.datetime = datetime.datetime.now()

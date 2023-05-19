@@ -68,3 +68,4 @@ def update_note(noteId):
 def delete_note(noteId):
     client["ordo"].find_one_and_delete({"_id": ObjectId(noteId), "owner": ObjectId(request.cookies.get("user_id"))})
     return redirect("/notes/")
+

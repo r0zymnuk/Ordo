@@ -40,6 +40,7 @@ class CreateNote(Base):
 
 
 class Note(CreateNote):
+    folder: list[str] = ["General"]
     updated_at: Union[datetime, None] = None
     created_at: datetime = datetime.now()
 

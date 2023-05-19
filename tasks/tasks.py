@@ -15,13 +15,19 @@ tasks = Blueprint("tasks", __name__, url_prefix="/tasks", template_folder="templ
 @tasks.route("/")
 @login_required
 def get_tasks():
-    todo = list(client['todo'].find({'owner': ObjectId(request.cookies.get("user_id"))},
-                                    sort=[('created_at', -1)]))
-    for task in todo:
-        task['description'] = markdown.markdown(task['description'])
-        task["id"] = str(task["_id"])
-        del task["_id"]
-        task["owner"] = str(task["owner"])
+    urgent = convert_todo(
+        list(client['todo'].find({'owner': ObjectId(request.cookies.get("user_id")), 'type': 'Urgent'},
+                                 sort=[('created_at', -1)])))
+    important = convert_todo(
+        list(client['todo'].find({'owner': ObjectId(request.cookies.get("user_id")), 'type': 'Important'},
+                                 sort=[('created_at', -1)])))
+    urgent_important = convert_todo(list(client['todo'].find(
+        {'owner': ObjectId(request.cookies.get("user_id")), 'type': 'Urgent & Important'},
+        sort=[('created_at', -1)])))
+    not_important = convert_todo(list(client['todo'].find({'owner': ObjectId(request.cookies.get("user_id")),
+                                                           'type': 'Not Important'},
+                                                          sort=[('created_at', -1)])))
+
     user = ResponseUser(**client['user'].find_one({'_id': ObjectId(request.cookies.get("user_id"))},
                                                   {"hashed": 0, "disabled": 0}))
 
@@ -30,7 +36,10 @@ def get_tasks():
         context={
             "user": user
         },
-        tasks=todo
+        urgent=urgent,
+        important=important,
+        urgent_important=urgent_important,
+        not_important=not_important
     )
 
 
@@ -62,6 +71,7 @@ def create_task():
 
     new_task = ToDo(task=request.form.get("task"),
                     description=request.form.get("description", ""),
+                    type=request.form.get("type", "Not important"),
                     created_at=datetime.now(),
                     owner=str(ObjectId(userId)))
 
@@ -87,3 +97,12 @@ def delete_task(taskId):
     )
     if deleted:
         return redirect("/tasks/")
+
+
+def convert_todo(tasks_list):
+    for task in tasks_list:
+        task['description'] = markdown.markdown(task['description'])
+        task["id"] = str(task["_id"])
+        del task["_id"]
+        task["owner"] = str(task["owner"])
+    return tasks_list

@@ -13,7 +13,13 @@
                     <input name="description" type="text" class="form-control form-control-lg mx-2" placeholder="Description (Optional)">
 
                     <div class="container d-flex my-2 align-items-center">
-                        <p  class="form-control border-0 form-control-lg me-2">🔼🔼🔼 You can use markdown here 🔼🔼🔼 (To jump to new line leave 2 spaces)</p>
+                        <p  class="form-control border-0 form-control-lg me-2">🔼🔼🔼 You can use markdown here 🔼🔼🔼</p>
+                        <select name="type" class="form-control form-control-lg mx-2 w-25">
+                            <option value="Urgent & Important">Urgent & Important</option>
+                            <option value="Urgent">Urgent</option>
+                            <option value="Important">Important</option>
+                            <option selected value="Not Important">Not Urgent & Not Important</option>
+                        </select>
                         <button type="submit" class="btn btn-primary btn-lg" style="">Add</button>
                     </div>
                 </div>
@@ -21,8 +27,46 @@
         </div>
     </div>
 </div>
-    <div class="container-sm mt-5 pt-5 list-group w-auto">
-        {% for item in tasks %}
+
+
+{% if urgent_important|length > 0 %}
+<div class="container-sm mt-5 pt-5 list-group w-auto">
+    <h3 class="pb-2 mb-4 text-danger border-bottom border-3 border-danger">Urgent & Important</h3>
+        {% for item in urgent_important %}
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <form method="post" action="/tasks/{{ item.id }}{% if item.status != "Done" %}?status=Done{% elif item.status == "Done" %}/delete{% endif %}" class="d-flex gap-2 w-100 justify-content-between">
+                        <label class="d-flex gap-2 w-100">
+                            <input class="form-check-input flex-shrink-0 {% if item.status != "Done" %}opacity-0{% endif %}" disabled type="checkbox" {% if item.status == "Done" %}checked{% endif %}>
+                            <span class=" fs-5">
+                                {{ item.task }}
+                                <small class="d-block">
+                                    {{ item.created_at.strftime('%Y-%m-%d %H:%M') }} <span class="mx-2 border rounded-pill border-1 border-secondary bg-secondary " style="padding: 0;"></span>
+                                    {% if item.description %}
+                                    {{ item.description|safe }}
+                                    {% endif %}
+                                </small>
+                            </span>
+                        </label>
+                        <label class="d-flex flex-column justify-content-end">
+                                <small class="d-block text-mut text-end text-nowrap fs-6">{% if item.completed is defined and item.completed is not none %}Done: {{ item.completed.strftime('%Y-%m-%d %H:%M') }}{% elif item.due_to is defined and item.due_to is not none %}Due: {{ item.due_to.strftime('%Y-%m-%d %H:%M') }}{% endif %}</small>
+
+                                {% if item.status != "Done" %}
+                                    <button type="submit" class="btn btn-primary btn-md text-nowrap float-right  fs-5">Mark as Done</button>
+                                {% elif item.status == "Done" %}
+                                    <button type="submit" class="btn btn-danger btn-md text-nowrap float-right  fs-5">Delete task</button>
+                                {% endif %}
+                        </label>
+
+                    </form>
+                </a>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if urgent|length > 0 %}
+<div class="container-sm mt-5 pt-5 list-group w-auto">
+    <h3 class="pb-2 mb-4 border-bottom border-3 border-warning " style="color: #fd7e14; border-color: #fd7e14;">Urgent</h3>
+        {% for item in urgent %}
 
                 <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
                     <form method="post" action="/tasks/{{ item.id }}{% if item.status != "Done" %}?status=Done{% elif item.status == "Done" %}/delete{% endif %}" class="d-flex gap-2 w-100 justify-content-between">
@@ -52,4 +96,77 @@
                 </a>
         {% endfor %}
     </div>
+{% endif %}
+
+
+{% if important|length > 0 %}
+<div class="container-sm mt-5 pt-5 list-group w-auto">
+    <h3 class="pb-2 mb-4 text-primary border-bottom border-3 border-primary">Important</h3>
+        {% for item in important %}
+
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <form method="post" action="/tasks/{{ item.id }}{% if item.status != "Done" %}?status=Done{% elif item.status == "Done" %}/delete{% endif %}" class="d-flex gap-2 w-100 justify-content-between">
+                        <label class="d-flex gap-2 w-100">
+                            <input class="form-check-input flex-shrink-0 {% if item.status != "Done" %}opacity-0{% endif %}" disabled type="checkbox" {% if item.status == "Done" %}checked{% endif %}>
+                            <span class=" fs-5">
+                                {{ item.task }}
+                                <small class="d-block">
+                                    {{ item.created_at.strftime('%Y-%m-%d %H:%M') }} <span class="mx-2 border rounded-pill border-1 border-secondary bg-secondary " style="padding: 0;"></span>
+                                    {% if item.description %}
+                                    {{ item.description|safe }}
+                                    {% endif %}
+                                </small>
+                            </span>
+                        </label>
+                        <label class="d-flex flex-column justify-content-end">
+                                <small class="d-block text-mut text-end text-nowrap fs-6">{% if item.completed is defined and item.completed is not none %}Done: {{ item.completed.strftime('%Y-%m-%d %H:%M') }}{% elif item.due_to is defined and item.due_to is not none %}Due: {{ item.due_to.strftime('%Y-%m-%d %H:%M') }}{% endif %}</small>
+
+                                {% if item.status != "Done" %}
+                                    <button type="submit" class="btn btn-primary btn-md text-nowrap float-right  fs-5">Mark as Done</button>
+                                {% elif item.status == "Done" %}
+                                    <button type="submit" class="btn btn-danger btn-md text-nowrap float-right  fs-5">Delete task</button>
+                                {% endif %}
+                        </label>
+
+                    </form>
+                </a>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if not_important|length > 0 %}
+<div class="container-sm mt-5 pt-5 list-group w-auto">
+    <h3 class="pb-2 mb-4 text-secondary border-bottom border-3 border-secondary">Not Urgent & Not Important</h3>
+        {% for item in not_important %}
+
+                <a href="#" class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+                    <form method="post" action="/tasks/{{ item.id }}{% if item.status != "Done" %}?status=Done{% elif item.status == "Done" %}/delete{% endif %}" class="d-flex gap-2 w-100 justify-content-between">
+                        <label class="d-flex gap-2 w-100">
+                            <input class="form-check-input flex-shrink-0 {% if item.status != "Done" %}opacity-0{% endif %}" disabled type="checkbox" {% if item.status == "Done" %}checked{% endif %}>
+                            <span class=" fs-5">
+                                {{ item.task }}
+                                <small class="d-block">
+                                    {{ item.created_at.strftime('%Y-%m-%d %H:%M') }} <span class="mx-2 border rounded-pill border-1 border-secondary bg-secondary " style="padding: 0;"></span>
+                                    {% if item.description %}
+                                    {{ item.description|safe }}
+                                    {% endif %}
+                                </small>
+                            </span>
+                        </label>
+                        <label class="d-flex flex-column justify-content-end">
+                                <small class="d-block text-mut text-end text-nowrap fs-6">{% if item.completed is defined and item.completed is not none %}Done: {{ item.completed.strftime('%Y-%m-%d %H:%M') }}{% elif item.due_to is defined and item.due_to is not none %}Due: {{ item.due_to.strftime('%Y-%m-%d %H:%M') }}{% endif %}</small>
+
+                                {% if item.status != "Done" %}
+                                    <button type="submit" class="btn btn-primary btn-md text-nowrap float-right  fs-5">Mark as Done</button>
+                                {% elif item.status == "Done" %}
+                                    <button type="submit" class="btn btn-danger btn-md text-nowrap float-right  fs-5">Delete task</button>
+                                {% endif %}
+                        </label>
+
+                    </form>
+                </a>
+        {% endfor %}
+    </div>
+{% endif %}
+
 {% endblock %}
